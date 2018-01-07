@@ -93,34 +93,34 @@ class ScaleReference(QtWidgets.QMainWindow):
         # Buttons Layout ------------------------------------------------------
 
         button_layout = QtWidgets.QVBoxLayout()
-        self.create_btn = QtWidgets.QPushButton("Create New Reference")
-        self.delete_btn = QtWidgets.QPushButton("Delete Named Reference")
+        create_btn = QtWidgets.QPushButton("Create New Reference")
+        delete_btn = QtWidgets.QPushButton("Delete Named Reference")
 
-        button_layout.layout().addWidget(self.create_btn)
-        button_layout.layout().addWidget(self.delete_btn)
+        button_layout.layout().addWidget(create_btn)
+        button_layout.layout().addWidget(delete_btn)
 
         # Central Widget ------------------------------------------------------
 
-        self.central_widget = QtWidgets.QWidget()
-        self.central_widget.setLayout(QtWidgets.QVBoxLayout())
-        self.central_widget.layout().addLayout(scene_units_lbl_layout)
-        self.central_widget.layout().addLayout(units_combobox_btn_layout)
+        central_widget = QtWidgets.QWidget()
+        central_widget.setLayout(QtWidgets.QVBoxLayout())
+        central_widget.layout().addLayout(scene_units_lbl_layout)
+        central_widget.layout().addLayout(units_combobox_btn_layout)
 
-        self.central_widget.layout().addLayout(scale_prefix_layout)
-        self.central_widget.layout().addLayout(dimensions_form_layout)
-        self.central_widget.layout().addLayout(button_layout)
+        central_widget.layout().addLayout(scale_prefix_layout)
+        central_widget.layout().addLayout(dimensions_form_layout)
+        central_widget.layout().addLayout(button_layout)
 
         # set central widget
-        self.setCentralWidget(self.central_widget)
+        self.setCentralWidget(central_widget)
 
         # =====================================================================
         # PyQt Execution Connections
         # =====================================================================
 
-        self.create_btn.clicked.connect(
+        create_btn.clicked.connect(
             lambda: self.create_dimension_grp(units_combobox.currentText()))
 
-        self.delete_btn.clicked.connect(lambda: self.delete_dimension_grp())
+        delete_btn.clicked.connect(lambda: self.delete_dimension_grp())
 
         self.width_le.textChanged.connect(
             lambda: self.check_line_edit_state(self.width_le))
@@ -151,17 +151,13 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         if up_axis == 'y':
             dimension_form_layout.addRow("Width (X): ", width_le)
-
             dimension_form_layout.addRow("Height (Y): ", height_le)
-
             dimension_form_layout.addRow("Length (Z): ", length_le)
 
         elif up_axis == 'z':
 
             dimension_form_layout.addRow("Width (X): ", width_le)
-
             dimension_form_layout.addRow("Length (Y): ", length_le)
-
             dimension_form_layout.addRow("Height (Z): ", height_le)
 
         double_validator = QtGui.QDoubleValidator()
@@ -299,8 +295,9 @@ class ScaleReference(QtWidgets.QMainWindow):
                 'the one that already exists')
 
         else:
-            if len_value is None or len_value == 0.0 or width_value is None
-            or width_value == 0.0 or height_val is None or height_val == 0.0:
+            if len_value is None or len_value == 0.0 or width_value is None \
+                or width_value == 0.0 or height_val is None or \
+                    height_val == 0.0:
 
                 self.popup_ok_window('Distance Values cannot be Zero')
 
