@@ -21,11 +21,13 @@ from Qt import QtWidgets
 from Qt import QtCore
 from Qt import QtGui
 
+
 class ScaleReference(QtWidgets.QMainWindow):
     """Class that creates QtWidget and executes functionality.
 
-    This class is meant to create a length, width, and height distance measurement
-    tools to display in Maya and be used as a scale reference.
+    This class is meant to create a length, width,
+    and height distance measurement tools to display in Maya and
+    be used as a scale reference.
     """
 
     def __init__(self, parent=None):
@@ -54,7 +56,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         scene_units_lbl_layout.layout().addWidget(scene_units_lbl)
         scene_units_lbl_layout.layout().addWidget(units_lbl)
 
-        # User selected Units combobox Layout ----------------------------------
+        # User selected Units combobox Layout ---------------------------------
 
         units_combobox_btn_layout = QtWidgets.QHBoxLayout()
 
@@ -67,7 +69,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         units_combobox_btn_layout.layout().addWidget(units_combobox_lbl)
         units_combobox_btn_layout.layout().addWidget(units_combobox)
 
-        # Prefix Line Edit Layout ----------------------------------------------
+        # Prefix Line Edit Layout ---------------------------------------------
 
         scale_prefix_layout = QtWidgets.QHBoxLayout()
 
@@ -77,7 +79,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         scale_prefix_layout.layout().addWidget(scale_prefix_lbl)
         scale_prefix_layout.layout().addWidget(self.scale_prefix_le)
 
-        # Dimension Line Edits Layout ------------------------------------------
+        # Dimension Line Edits Layout -----------------------------------------
 
         self.length_le = QtWidgets.QLineEdit("")
 
@@ -88,7 +90,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         dimensions_form_layout = self.create_dimension_layouts(
             self.length_le, self.width_le, self.height_le)
 
-        # Buttons Layout -------------------------------------------------------
+        # Buttons Layout ------------------------------------------------------
 
         button_layout = QtWidgets.QVBoxLayout()
         self.create_btn = QtWidgets.QPushButton("Create New Reference")
@@ -97,7 +99,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         button_layout.layout().addWidget(self.create_btn)
         button_layout.layout().addWidget(self.delete_btn)
 
-        # Central Widget -------------------------------------------------------
+        # Central Widget ------------------------------------------------------
 
         self.central_widget = QtWidgets.QWidget()
         self.central_widget.setLayout(QtWidgets.QVBoxLayout())
@@ -111,29 +113,33 @@ class ScaleReference(QtWidgets.QMainWindow):
         # set central widget
         self.setCentralWidget(self.central_widget)
 
-        # =======================================================================
+        # =====================================================================
         # PyQt Execution Connections
-        # =======================================================================
+        # =====================================================================
 
         self.create_btn.clicked.connect(
             lambda: self.create_dimension_grp(units_combobox.currentText()))
 
         self.delete_btn.clicked.connect(lambda: self.delete_dimension_grp())
 
-        self.width_le.textChanged.connect(lambda: self.check_line_edit_state(self.width_le))
+        self.width_le.textChanged.connect(
+            lambda: self.check_line_edit_state(self.width_le))
         self.width_le.textChanged.emit(self.width_le.text())
 
-        self.length_le.textChanged.connect(lambda: self.check_line_edit_state(self.length_le))
+        self.length_le.textChanged.connect(
+            lambda: self.check_line_edit_state(self.length_le))
         self.length_le.textChanged.emit(self.length_le.text())
 
-        self.height_le.textChanged.connect(lambda: self.check_line_edit_state(self.height_le))
+        self.height_le.textChanged.connect(
+            lambda: self.check_line_edit_state(self.height_le))
         self.height_le.textChanged.emit(self.height_le.text())
 
     def create_dimension_layouts(self, length_le, width_le, height_le):
         """Creates custom layout that contains the length, width, and height QLineEdits
 
-        If Maya scene is Y or Z up the length, width, and height QLineEdits will be arranged
-        differently. Validator is also set for each QLineEdit.
+        If Maya scene is Y or Z up the length, width, and
+        height QLineEdits will be arranged differently.
+        Validator is also set for each QLineEdit.
 
         Returns:
             tuple -- returns layouts with QLabels and QLineEdits
@@ -173,7 +179,8 @@ class ScaleReference(QtWidgets.QMainWindow):
         """Changes Stylesheet of input line edit.
 
         Validator checks state of line edit and changes line edit's font
-        and background for visual confirmation that line edit input is acceptable.
+        and background for visual confirmation that line edit input is
+        acceptable.
 
         Arguments:
             line_edit {QLineEdit} -- Input QLineEdit to analyze.
@@ -183,9 +190,10 @@ class ScaleReference(QtWidgets.QMainWindow):
         validator = sender.validator()
         state = validator.validate(sender.text(), 0)[0]
         if state == QtGui.QValidator.Acceptable:
-            font_color = '#000000' # black
-            bg_color = '#c4df9b' # green
-            sender.setStyleSheet('QLineEdit { color: %s; background-color: %s }' \
+            font_color = '#000000'  # black
+            bg_color = '#c4df9b'  # green
+            sender.setStyleSheet(
+                'QLineEdit { color: %s; background-color: %s }'
                 % (font_color, bg_color))
         elif sender.text() == "":
             sender.setStyleSheet('')
@@ -225,9 +233,10 @@ class ScaleReference(QtWidgets.QMainWindow):
         msg = QtWidgets.QMessageBox()
 
         msg.setText(message)
-        #msg.setWindowTitle("MessageBox demo")
-        #msg.setDetailedText("The details are as follows:")
-        msg.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        # msg.setWindowTitle("MessageBox demo")
+        # msg.setDetailedText("The details are as follows:")
+        msg.setStandardButtons(
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
         result = msg.exec_()
 
@@ -250,8 +259,8 @@ class ScaleReference(QtWidgets.QMainWindow):
         msg = QtWidgets.QMessageBox()
 
         msg.setText(message)
-        #msg.setWindowTitle("MessageBox demo")
-        #msg.setDetailedText("The details are as follows:")
+        # msg.setWindowTitle("MessageBox demo")
+        # msg.setDetailedText("The details are as follows:")
         msg.addButton("Up", QtWidgets.QMessageBox.YesRole)
         msg.addButton("Down", QtWidgets.QMessageBox.NoRole)
 
@@ -284,41 +293,55 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         elif cmds.objExists(str(grp_name) + '_refDistance_grp'):
 
-            self.popup_ok_window(str(grp_name) + '_refDistance_grp' + \
-            ' already exists.\nRename the new group or delete the one that already exists')
+            self.popup_ok_window(
+                str(grp_name) + '_refDistance_grp' +
+                ' already exists.\nRename the new group or delete ' +
+                'the one that already exists')
 
         else:
-            if len_value is None or len_value == 0.0 or width_value is None or \
-                width_value == 0.0 or height_val is None or height_val == 0.0:
+            if len_value is None or len_value == 0.0 or width_value is None
+            or width_value == 0.0 or height_val is None or height_val == 0.0:
 
                 self.popup_ok_window('Distance Values cannot be Zero')
 
             else:
 
                 if self.current_maya_unit != target_unit:
-                    message = 'Convert up from ' + str(self.current_maya_unit) + ' to ' \
-                        + str(target_unit) + '\nOR\n' + 'Convert down from ' + \
-                            str(target_unit) + ' to ' + str(self.current_maya_unit) + '?'
+                    message = \
+                        'Convert up from ' + str(self.current_maya_unit) + \
+                        'to ' + str(target_unit) + '\nOR\n' + \
+                        'Convert down from ' + str(target_unit) + ' to ' \
+                        + str(self.current_maya_unit) + '?'
 
                     up_or_down = self.popup_up_down_window(message)
 
                     if up_or_down:
                         unit_convert_length = cmds.convertUnit(
-                            str(len_value), fromUnit=target_unit, \
-                                toUnit=self.current_maya_unit)
-                        unit_conv_width = cmds.convertUnit(str(width_value), \
-                            fromUnit=target_unit, toUnit=self.current_maya_unit)
-                        unit_conv_height = cmds.convertUnit(str(height_val), \
-                            fromUnit=target_unit, toUnit=self.current_maya_unit)
+                            str(len_value),
+                            fromUnit=target_unit,
+                            toUnit=self.current_maya_unit)
+                        unit_conv_width = cmds.convertUnit(
+                            str(width_value),
+                            fromUnit=target_unit,
+                            toUnit=self.current_maya_unit)
+                        unit_conv_height = cmds.convertUnit(
+                            str(height_val),
+                            fromUnit=target_unit,
+                            toUnit=self.current_maya_unit)
 
                     else:
-                        unit_convert_length = cmds.convertUnit( \
-                            str(len_value), fromUnit=self.current_maya_unit, \
-                                toUnit=target_unit)
-                        unit_conv_width = cmds.convertUnit(str(width_value), \
-                            fromUnit=self.current_maya_unit, toUnit=target_unit)
-                        unit_conv_height = cmds.convertUnit(str(height_val), \
-                            fromUnit=self.current_maya_unit, toUnit=target_unit)
+                        unit_convert_length = cmds.convertUnit(
+                            str(len_value),
+                            fromUnit=self.current_maya_unit,
+                            toUnit=target_unit)
+                        unit_conv_width = cmds.convertUnit(
+                            str(width_value),
+                            fromUnit=self.current_maya_unit,
+                            toUnit=target_unit)
+                        unit_conv_height = cmds.convertUnit(
+                            str(height_val),
+                            fromUnit=self.current_maya_unit,
+                            toUnit=target_unit)
 
                     temp_str_length = unit_convert_length.split(target_unit)
                     temp_str_width = unit_conv_width.split(target_unit)
@@ -328,14 +351,16 @@ class ScaleReference(QtWidgets.QMainWindow):
                     width_value = float(temp_str_width[0])
                     height_val = float(temp_str_height[0])
 
-                    #Test Case: if values after conversion are too small to be used in current scene
+                    # Test Case: if values after conversion are too small
+                    # to be used in current scene
                     if len_value < .1 or width_value < .1 or height_val < .1:
 
                         message = 'Values are too small to convert to ' \
-                            + str(target_unit) + '\'s' + 'while in a scene using ' \
-                                + str(self.current_maya_unit) + '\'s.' \
-                                    +'\nRerun script with different target units to convert to ' \
-                                        + 'or use larger values.'
+                            + str(target_unit) + '\'s' + \
+                            'while in a scene using ' + \
+                            str(self.current_maya_unit) + '\'s.' \
+                            + '\nRerun script with different target units ' + \
+                            'to convert to ' + 'or use larger values.'
 
                         self.popup_ok_window(message)
 
@@ -356,17 +381,23 @@ class ScaleReference(QtWidgets.QMainWindow):
                         tuple_start_pos = 0, (height_val)/2.0, 0
                         tuple_end_pos = 0, -((height_val)/2.0), 0
 
-                    #create Length Locators
-                    start_dimen_loc = cmds.spaceLocator(n=str(grp_name) + \
-                        '_start' + dimen + '_loc_01', p=tuple_start_pos)
+                    # create Length Locators
+                    start_dimen_loc = cmds.spaceLocator(
+                        n=str(grp_name) + '_start' + dimen + '_loc_01',
+                        p=tuple_start_pos)
 
-                    end_dimen_loc = cmds.spaceLocator(n=str(grp_name) + \
-                        '_end' + dimen + '_loc_01', p=tuple_end_pos)
+                    end_dimen_loc = cmds.spaceLocator(
+                        n=str(grp_name) + '_end' + dimen + '_loc_01',
+                        p=tuple_end_pos)
 
-                    #create length distanceDimension at generic 3d point to be repurposed
-                    cmds.distanceDimension(startPoint=[1, 1, 1], endPoint=[-1, -1, -1])
+                    # Create length distanceDimension at generic 3d point
+                    # to be repurposed
+                    cmds.distanceDimension(
+                        startPoint=[1, 1, 1],
+                        endPoint=[-1, -1, -1])
 
-                    #rename default distanceDimension locators' transform and shape
+                    # Rename default distanceDimension locators' transform and
+                    # shape
                     temp_loc_1 = cmds.rename('locator1', 'tempLoc_01')
                     temp_rel_1 = cmds.listRelatives(temp_loc_1)
                     loc_name_1 = cmds.rename(temp_rel_1, temp_loc_1 + 'Shape')
@@ -375,50 +406,78 @@ class ScaleReference(QtWidgets.QMainWindow):
                     temp_rel_2 = cmds.listRelatives(temp_loc_2)
                     loc_name_2 = cmds.rename(temp_rel_2, temp_loc_2 + 'Shape')
 
-                    #rename distanceDimension Node
-                    dist_dimen_new_name = cmds.rename('distanceDimension1', \
+                    # Rename distanceDimension Node
+                    dist_dimen_new_name = cmds.rename(
+                        'distanceDimension1',
                         str(grp_name) + '_dist' + dimen + '_01')
                     temp_rel = cmds.listRelatives(dist_dimen_new_name)
                     cmds.rename(temp_rel, dist_dimen_new_name + 'Shape')
 
-                    #disconnect default distanceDimension locator and distanceDimension Node
-                    cmds.disconnectAttr(str(loc_name_1) + '.worldPosition', \
+                    # Disconnect default distanceDimension locator and
+                    # distanceDimension Node
+                    cmds.disconnectAttr(
+                        str(loc_name_1) + '.worldPosition',
                         str(dist_dimen_new_name) + 'Shape' + '.startPoint')
-                    cmds.disconnectAttr(str(loc_name_2) + '.worldPosition', \
+                    cmds.disconnectAttr(
+                        str(loc_name_2) + '.worldPosition',
                         str(dist_dimen_new_name) + 'Shape' + '.endPoint')
 
-                    #connect new Locators to distanceDimension Node
-                    cmds.connectAttr(start_dimen_loc[0] + 'Shape.worldPosition', \
+                    # Connect new Locators to distanceDimension Node
+                    cmds.connectAttr(
+                        start_dimen_loc[0] + 'Shape.worldPosition',
                         str(dist_dimen_new_name) + 'Shape' + '.startPoint')
-                    cmds.connectAttr(end_dimen_loc[0] + 'Shape.worldPosition', \
+                    cmds.connectAttr(
+                        end_dimen_loc[0] + 'Shape.worldPosition',
                         str(dist_dimen_new_name) + 'Shape' + '.endPoint')
 
-                    #delete default Locators
+                    # Delete default Locators
                     cmds.delete(temp_loc_1, temp_loc_2)
 
                     if dimen == 'length':
-                        #group Lenth distanceDimension objects
-                        length_grp = cmds.group(start_dimen_loc, end_dimen_loc, \
-                            dist_dimen_new_name, n=str(grp_name) + '_' + dimen + 'Dist_grp')
+                        # group Lenth distanceDimension objects
+                        length_grp = cmds.group(
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name,
+                            n=str(grp_name) + '_' + dimen + 'Dist_grp')
 
-                        self.set_color_overide(13, start_dimen_loc, \
-                            end_dimen_loc, dist_dimen_new_name)
+                        self.set_color_overide(
+                            13,
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name)
 
                     elif dimen == 'width':
-                        width_grp = cmds.group(start_dimen_loc, end_dimen_loc, \
-                            dist_dimen_new_name, n=str(grp_name) + '_' + dimen + 'Dist_grp')
+                        width_grp = cmds.group(
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name,
+                            n=str(grp_name) + '_' + dimen + 'Dist_grp')
 
-                        self.set_color_overide(6, start_dimen_loc, \
-                            end_dimen_loc, dist_dimen_new_name)
+                        self.set_color_overide(
+                            6,
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name)
 
                     elif dimen == 'height':
-                        height_grp = cmds.group(start_dimen_loc, end_dimen_loc, \
-                            dist_dimen_new_name, n=str(grp_name) + '_' + dimen + 'Dist_grp')
+                        height_grp = cmds.group(
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name,
+                            n=str(grp_name) + '_' + dimen + 'Dist_grp')
 
-                        self.set_color_overide(14, start_dimen_loc, \
-                            end_dimen_loc, dist_dimen_new_name)
+                        self.set_color_overide(
+                            14,
+                            start_dimen_loc,
+                            end_dimen_loc,
+                            dist_dimen_new_name)
 
-                cmds.group(length_grp, width_grp, height_grp, n=str(grp_name) + '_refDistance_grp')
+                cmds.group(
+                    length_grp,
+                    width_grp,
+                    height_grp,
+                    n=str(grp_name) + '_refDistance_grp')
 
                 self.reset_line_edits()
 
@@ -427,8 +486,10 @@ class ScaleReference(QtWidgets.QMainWindow):
         """Sets overrideColor attribute.
 
         Arguments:
-            index {int} -- Input index determines color of overrideColor attribute.
-            *args {Maya objects} -- Inputs that would have their colors changed.
+            index {int} -- Input index determines color of overrideColor
+                attribute.
+            *args {Maya objects} -- Inputs that would have their colors
+                changed.
         """
 
         for loc in args:
@@ -446,7 +507,7 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         grp_name = self.scale_prefix_le.text()
 
-        #test case if reference Name textField is empty
+        # Test case if reference Name textField is empty
         if grp_name == '':
             self.popup_ok_window('A name was not entered')
         elif cmds.objExists(str(grp_name) + '_refDistance_grp'):
@@ -468,7 +529,9 @@ class ScaleReference(QtWidgets.QMainWindow):
         self.height_le.setText('')
 
 
-MAIN_WINDOW = [o for o in QtWidgets.qApp.topLevelWidgets() if o.objectName() == "MayaWindow"][0]
+MAIN_WINDOW = \
+    [o for o in QtWidgets.qApp.topLevelWidgets() if o.objectName() ==
+     "MayaWindow"][0]
 
 UI_WINDOW = ScaleReference(MAIN_WINDOW)
 UI_WINDOW.show()
