@@ -1,18 +1,18 @@
-"""
-# ==============================================================================
-# !/usr/bin/env python
-# title           :ScaleReferenceQT.py
-# description     :Python script for Maya to create a reference bounding box
-#                  based on designated units
-# author          :Doug Halley
-# date            :20171114
-# version         :3.0
-# usage           :
-# notes           :
-# python_version  :2.7.14
-# pyqt_version    :4.11.4
-# ==============================================================================
-"""
+'''
+===============================================================================
+!/usr/bin/env python
+title           :ScaleReferenceQT.py
+description     :Python script for Maya to create a reference bounding box
+                 based on designated units
+author          :Doug Halley
+date            :2018-01-12
+version         :5.0
+usage           :
+notes           :
+python_version  :2.7.14
+pyqt_version    :4.11.4
+===============================================================================
+'''
 
 from maya import cmds
 
@@ -23,29 +23,36 @@ from Qt import QtGui
 
 
 class ScaleReference(QtWidgets.QMainWindow):
-    """Class that creates QtWidget and executes functionality.
+    '''Class that creates QtWidget and executes functionality.
 
     This class is meant to create a length, width,
     and height distance measurement tools to display in Maya and
     be used as a scale reference.
-    """
+    '''
 
     def __init__(self, parent=None):
+        '''Initilizes the PyQt Interface.
+
+        Keyword Arguments:
+            parent {None} -- By having no parent, ui can be standalone
+                                (default: {None})
+        '''
+
         super(ScaleReference, self).__init__(parent)
         self.init_ui()
 
     def init_ui(self):
-        """Logic to create QtWidget's UI.
+        '''Logic to create QtWidget's UI.
 
-        """
+        '''
 
-        self.setWindowTitle("Scale Reference")
+        self.setWindowTitle('Scale Reference')
 
         # Label for Scene Units -----------------------------------------------
 
         scene_units_lbl_layout = QtWidgets.QHBoxLayout()
 
-        scene_units_lbl = QtWidgets.QLabel("Scene's Units:")
+        scene_units_lbl = QtWidgets.QLabel('Scene\'s Units:')
         scene_units_lbl.setAlignment(QtCore.Qt.AlignCenter)
 
         self.current_maya_unit = cmds.currentUnit(query=True, linear=True)
@@ -60,7 +67,7 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         units_combobox_btn_layout = QtWidgets.QHBoxLayout()
 
-        units_combobox_lbl = QtWidgets.QLabel("Convert Units To:")
+        units_combobox_lbl = QtWidgets.QLabel('Convert Units To:')
         units_combobox = QtWidgets.QComboBox()
 
         for unit in ['cm', 'mm', 'm', 'km', 'in', 'ft', 'yd', 'mi']:
@@ -73,19 +80,19 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         scale_prefix_layout = QtWidgets.QHBoxLayout()
 
-        scale_prefix_lbl = QtWidgets.QLabel("Reference Prefix:")
-        self.scale_prefix_le = QtWidgets.QLineEdit("")
+        scale_prefix_lbl = QtWidgets.QLabel('Reference Prefix:')
+        self.scale_prefix_le = QtWidgets.QLineEdit('')
 
         scale_prefix_layout.layout().addWidget(scale_prefix_lbl)
         scale_prefix_layout.layout().addWidget(self.scale_prefix_le)
 
         # Dimension Line Edits Layout -----------------------------------------
 
-        self.length_le = QtWidgets.QLineEdit("")
+        self.length_le = QtWidgets.QLineEdit('')
 
-        self.width_le = QtWidgets.QLineEdit("")
+        self.width_le = QtWidgets.QLineEdit('')
 
-        self.height_le = QtWidgets.QLineEdit("")
+        self.height_le = QtWidgets.QLineEdit('')
 
         dimensions_form_layout = self.create_dimension_layouts(
             self.length_le, self.width_le, self.height_le)
@@ -93,8 +100,8 @@ class ScaleReference(QtWidgets.QMainWindow):
         # Buttons Layout ------------------------------------------------------
 
         button_layout = QtWidgets.QVBoxLayout()
-        create_btn = QtWidgets.QPushButton("Create New Reference")
-        delete_btn = QtWidgets.QPushButton("Delete Named Reference")
+        create_btn = QtWidgets.QPushButton('Create New Reference')
+        delete_btn = QtWidgets.QPushButton('Delete Named Reference')
 
         button_layout.layout().addWidget(create_btn)
         button_layout.layout().addWidget(delete_btn)
@@ -135,7 +142,7 @@ class ScaleReference(QtWidgets.QMainWindow):
         self.height_le.textChanged.emit(self.height_le.text())
 
     def create_dimension_layouts(self, length_le, width_le, height_le):
-        """Creates custom layout that contains the length, width, and height QLineEdits
+        '''Creates custom layout that contains the length, width, and height QLineEdits
 
         If Maya scene is Y or Z up the length, width, and
         height QLineEdits will be arranged differently.
@@ -143,22 +150,22 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         Returns:
             tuple -- returns layouts with QLabels and QLineEdits
-        """
+        '''
 
         dimension_form_layout = QtWidgets.QFormLayout()
 
         up_axis = cmds.upAxis(q=True, axis=True)
 
         if up_axis == 'y':
-            dimension_form_layout.addRow("Width (X): ", width_le)
-            dimension_form_layout.addRow("Height (Y): ", height_le)
-            dimension_form_layout.addRow("Length (Z): ", length_le)
+            dimension_form_layout.addRow('Width (X): ', width_le)
+            dimension_form_layout.addRow('Height (Y): ', height_le)
+            dimension_form_layout.addRow('Length (Z): ', length_le)
 
         elif up_axis == 'z':
 
-            dimension_form_layout.addRow("Width (X): ", width_le)
-            dimension_form_layout.addRow("Length (Y): ", length_le)
-            dimension_form_layout.addRow("Height (Z): ", height_le)
+            dimension_form_layout.addRow('Width (X): ', width_le)
+            dimension_form_layout.addRow('Length (Y): ', length_le)
+            dimension_form_layout.addRow('Height (Z): ', height_le)
 
         double_validator = QtGui.QDoubleValidator()
         double_validator.setDecimals(3)
@@ -172,7 +179,7 @@ class ScaleReference(QtWidgets.QMainWindow):
 
     @classmethod
     def check_line_edit_state(cls, line_edit):
-        """Changes Stylesheet of input line edit.
+        '''Changes Stylesheet of input line edit.
 
         Validator checks state of line edit and changes line edit's font
         and background for visual confirmation that line edit input is
@@ -180,7 +187,7 @@ class ScaleReference(QtWidgets.QMainWindow):
 
         Arguments:
             line_edit {QLineEdit} -- Input QLineEdit to analyze.
-        """
+        '''
 
         sender = line_edit
         validator = sender.validator()
@@ -191,22 +198,22 @@ class ScaleReference(QtWidgets.QMainWindow):
             sender.setStyleSheet(
                 'QLineEdit { color: %s; background-color: %s }'
                 % (font_color, bg_color))
-        elif sender.text() == "":
+        elif sender.text() == '':
             sender.setStyleSheet('')
-        """
+        '''
         elif state == QtGui.QValidator.Intermediate:
             color = '#fff79a' # yellow
         elif state == QtGui.QValidator.Invalid:
             color = '#f6989d' # red
-        """
+        '''
 
     @classmethod
     def popup_ok_window(cls, message):
-        """Popup Ok message box to display information to user.
+        '''Popup Ok message box to display information to user.
 
         Arguments:
             message {str} -- Input string for QMessageBox to display.
-        """
+        '''
 
         popup_window = QtWidgets.QMessageBox()
 
@@ -217,20 +224,20 @@ class ScaleReference(QtWidgets.QMainWindow):
 
     @classmethod
     def popup_yes_no_window(cls, message):
-        """Popup Ok message box to display information to user.
+        '''Popup Ok message box to display information to user.
 
         Arguments:
             message {str} -- Input string for QMessageBox to display.
 
         Returns:
             bool -- Returns True if Yes or False if No
-        """
+        '''
 
         msg = QtWidgets.QMessageBox()
 
         msg.setText(message)
-        # msg.setWindowTitle("MessageBox demo")
-        # msg.setDetailedText("The details are as follows:")
+        # msg.setWindowTitle('MessageBox demo')
+        # msg.setDetailedText('The details are as follows:')
         msg.setStandardButtons(
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
 
@@ -243,22 +250,22 @@ class ScaleReference(QtWidgets.QMainWindow):
 
     @classmethod
     def popup_up_down_window(cls, message):
-        """Popup Ok message box to display information to user.
+        '''Popup Ok message box to display information to user.
 
         Arguments:
             message {str} -- Input string for QMessageBox to display.
 
         Returns:
             bool -- Returns True if Yes or False if No
-        """
+        '''
 
         msg = QtWidgets.QMessageBox()
 
         msg.setText(message)
-        # msg.setWindowTitle("MessageBox demo")
-        # msg.setDetailedText("The details are as follows:")
-        msg.addButton("Up", QtWidgets.QMessageBox.YesRole)
-        msg.addButton("Down", QtWidgets.QMessageBox.NoRole)
+        # msg.setWindowTitle('MessageBox demo')
+        # msg.setDetailedText('The details are as follows:')
+        msg.addButton('Up', QtWidgets.QMessageBox.YesRole)
+        msg.addButton('Down', QtWidgets.QMessageBox.NoRole)
 
         result = msg.exec_()
 
@@ -268,14 +275,14 @@ class ScaleReference(QtWidgets.QMainWindow):
             return False
 
     def create_dimension_grp(self, target_unit):
-        """Create Dimension Group for a reference of scale.
+        '''Create Dimension Group for a reference of scale.
 
         Dimension Group is a set of 3 custom distance measurements to represent
         length, width, and height.
 
         Arguments:
             item {[type]} -- [description]
-        """
+        '''
 
         dimens = ('length', 'width', 'height')
 
@@ -480,27 +487,27 @@ class ScaleReference(QtWidgets.QMainWindow):
 
     @classmethod
     def set_color_overide(cls, index, *args):
-        """Sets overrideColor attribute.
+        '''Sets overrideColor attribute.
 
         Arguments:
             index {int} -- Input index determines color of overrideColor
                 attribute.
             *args {Maya objects} -- Inputs that would have their colors
                 changed.
-        """
+        '''
 
         for loc in args:
             if 'dist' in loc:
-                cmds.setAttr(str(loc) + ".overrideEnabled", 1)
-                cmds.setAttr(str(loc) + ".overrideColor", index)
+                cmds.setAttr(str(loc) + '.overrideEnabled', 1)
+                cmds.setAttr(str(loc) + '.overrideColor', index)
             else:
-                cmds.setAttr(loc[0] + ".overrideEnabled", 1)
-                cmds.setAttr(loc[0] + ".overrideColor", index)
+                cmds.setAttr(loc[0] + '.overrideEnabled', 1)
+                cmds.setAttr(loc[0] + '.overrideColor', index)
 
     def delete_dimension_grp(self):
-        """Deletes grp that contains predefined suffix.
+        '''Deletes grp that contains predefined suffix.
 
-        """
+        '''
 
         grp_name = self.scale_prefix_le.text()
 
@@ -516,9 +523,9 @@ class ScaleReference(QtWidgets.QMainWindow):
                 str(grp_name) + '_refDistance_grp' + 'does not exist')
 
     def reset_line_edits(self):
-        """Resets Qt QLineEdits after Dimension Group creation and deletion.
+        '''Resets Qt QLineEdits after Dimension Group creation and deletion.
 
-        """
+        '''
 
         self.scale_prefix_le.setText('')
         self.length_le.setText('')
@@ -528,7 +535,7 @@ class ScaleReference(QtWidgets.QMainWindow):
 
 MAIN_WINDOW = \
     [o for o in QtWidgets.qApp.topLevelWidgets() if o.objectName() ==
-     "MayaWindow"][0]
+     'MayaWindow'][0]
 
 UI_WINDOW = ScaleReference(MAIN_WINDOW)
 UI_WINDOW.show()
